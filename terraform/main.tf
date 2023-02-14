@@ -55,6 +55,7 @@ resource "aws_instance" "my_amazon" {
        sudo yum install docker -y
        sudo systemctl start docker
        sudo usermod -a -G docker ec2-user
+       sudo yum install docker-compose-plugin
      EOF
 }
 
