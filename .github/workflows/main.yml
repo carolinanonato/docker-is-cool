@@ -1,15 +1,16 @@
-name: Build and Push Docker Images to ECR
+name: Deploy to ECR
 
-on:
+on: 
   push:
-    branches: [main]
+    branches: [ master ]
 
 jobs:
-  build-and-push:
+  build:
+    name: Build Image
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
+    - name: Check out code
       uses: actions/checkout@v2
 
     - name: Login to Amazon ECR
@@ -21,20 +22,17 @@ jobs:
         AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
         AWS_REGION: us-east-1
 
-    - name: Build and tag Docker images
-      id: build-images
+    - name: Build and push images to Amazon ECR
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: latest
+        ECR_REPOSITORY: containersassignment
+        IMAGE_TAG_APP: app.v0.1
+        IMAGE_TAG_DB: db.v0.1
+           
+
       run: |
-        docker-compose build
-        docker image ls
-       
-       
-    - name: Push Docker images to ECR
-      env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: latest
-      id: push-images
-      run: |
-         docker push docker-is-cool_app
+        
+        docker build -t $ECR_REGISTRY/${ECR_REPOSITORY}:${IMAGE_TAG_APP} -f Dockerfile .
+        docker push $ECR_REGISTRY/${ECR_REPOSITORY}:${IMAGE_TAG_APP}
+        docker build -t $ECR_REGISTRY/${ECR_REPOSITORY}:${IMAGE_TAG_DB} -f init.sql
+        docker push $ECR_REGISTRY/${ECR_REPOSITORY}:${IMAGE_TAG_DB}
