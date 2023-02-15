@@ -28,6 +28,7 @@ jobs:
         IMAGE_TAG: latest
       run: |
         docker-compose build
+        docker image ls
        
        
     - name: Push Docker images to ECR
