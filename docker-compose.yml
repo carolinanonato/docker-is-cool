@@ -1,7 +1,7 @@
 version: "2"
 services:
   app:
-    build: ./app
+    build: app
     links:
       - db
     ports:
@@ -9,6 +9,7 @@ services:
 
   db:
     image: mysql:5.7
+    build: db
     ports:
       - "32000:3306"
     environment:
