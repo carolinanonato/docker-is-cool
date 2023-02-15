@@ -32,6 +32,6 @@ jobs:
         ECR_REGISTRY: ${{ env.ECR_REGISTRY }}
         IMAGE_NAME: ${{ env.IMAGE_NAME }}
       run: |
-        docker-compose build
+        docker-compose up -d
         docker tag $IMAGE_NAME:latest $ECR_REGISTRY/$IMAGE_NAME:latest
         docker push $ECR_REGISTRY/$IMAGE_NAME:latest
