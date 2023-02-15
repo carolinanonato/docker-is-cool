@@ -30,6 +30,7 @@ jobs:
     - name: Build and tag Docker images
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: latest
       id: build-images
       run: |
         docker-compose build
