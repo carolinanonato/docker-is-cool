@@ -32,10 +32,8 @@ jobs:
         IMAGE_TAG: latest
       run: |
         docker-compose build
-        docker tag app:$IMAGE_TAG $ECR_REGISTRY/app:$IMAGE_TAG
-        docker tag db:$IMAGE_TAG $ECR_REGISTRY/db:$IMAGE_TAG
-
-      
+       
+       
     - name: Push Docker images to ECR
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
