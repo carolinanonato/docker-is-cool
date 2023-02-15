@@ -33,8 +33,8 @@ jobs:
       id: build-images
       run: |
         docker-compose build
-        docker tag myapp_app:latest $ECR_REGISTRY/app:latest
-        docker tag myapp_db:latest $ECR_REGISTRY/db:latest
+        docker tag app:latest $ECR_REGISTRY/app:latest
+        docker tag db:latest $ECR_REGISTRY/db:latest
 
     - name: Push Docker images to ECR
       id: push-images
