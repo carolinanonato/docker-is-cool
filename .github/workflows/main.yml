@@ -36,5 +36,4 @@ jobs:
         IMAGE_TAG: latest
       id: push-images
       run: |
-        docker push $ECR_REGISTRY/docker-is-cool_app:$IMAGE_TAG
-        docker push $ECR_REGISTRY/db:$IMAGE_TAG
+         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
