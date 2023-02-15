@@ -1,44 +1,41 @@
-name: Build and Push Docker Images
+name: Build and Push Docker Images to ECR
 
-on: 
+on:
   push:
-    branches:
-    - main
-  pull_request:
-    branches:
-    - main
+    branches: [main]
+
+env:
+  ECR_REGISTRY: <YOUR_ECR_REGISTRY>
+  AWS_REGION: <YOUR_AWS_REGION>
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
-        AWS_REGION: us-east-1
-
-  
 
     - name: Build and tag Docker images
-      env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: latest
       id: build-images
       run: |
         docker-compose build
-        docker tag app $ECR_REGISTRY/app
-        docker tag db $ECR_REGISTRY/db
+        docker tag app:latest $ECR_REGISTRY/app:latest
+        docker tag db:latest $ECR_REGISTRY/db:latest
 
     - name: Push Docker images to ECR
       id: push-images
       run: |
-        docker push $ECR_REGISTRY/app
-        docker push $ECR_REGISTRY/db
+        docker push $ECR_REGISTRY/app:latest
+        docker push $ECR_REGISTRY/db:latest
