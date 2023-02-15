@@ -37,4 +37,4 @@ jobs:
         IMAGE_TAG: latest
       id: push-images
       run: |
-         docker push myqsl
+         docker push $ECR_REGISTRY/mysql:$IMAGE_TAG
